@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Newtonsoft.Json;
+using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
     public class ResturantsController : ApiController
     {
         // GET: api/Resturants
-        public IEnumerable<string> Get()
+        public IEnumerable<Resturant> GetResturantsData()
         {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET: api/Resturants/5
-        public string Get(int id)
-        {
-            return "value";
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\SampleData.json");
+            string json = File.ReadAllText(path);
+            var list = JsonConvert.DeserializeObject<List<Resturant>>(json);
+            
+            return list;
         }
 
         // POST: api/Resturants
