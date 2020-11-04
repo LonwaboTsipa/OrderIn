@@ -7,18 +7,23 @@ using System.Net.Http;
 using System.Web.Http;
 using Newtonsoft.Json;
 using WebAPI.Models;
+using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
     public class ResturantsController : ApiController
     {
+        private ResturantService resturantService = new ResturantService();
+
+        public ResturantsController()
+        {
+
+        }
         // GET: api/Resturants
         public IEnumerable<Resturant> GetResturantsData()
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "App_Data\\SampleData.json");
-            string json = File.ReadAllText(path);
-            var list = JsonConvert.DeserializeObject<List<Resturant>>(json);
-            
+
+            var list = resturantService.GetAllResturants();
             return list;
         }
 
