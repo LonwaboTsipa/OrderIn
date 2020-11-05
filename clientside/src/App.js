@@ -1,26 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
-import React from 'react';
+import React, {Component}from 'react';
+import { inject, observer } from 'mobx-react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+@inject('ResturantStore')
+@observer
+class App extends Component {
+
+  handleSearch = (val) => {
+    val.preventDefault();
+    const keyword = this.keyword.value;
+//console.log(keyword)
+    this.props.ResturantStore.filterResturants(keyword);
+
+  }
+  render(){
+   // const { ResturantStore } = this.props;
+
+    return (
+      <div className="App">
+        <h2>You have { this.props.ResturantStore.filteredResturants}</h2>
+
+        <form onSubmit={e => this.handleSearch(e)}>
+          <input type="text" placeholder="Enter search keyword" ref={ input => this.keyword = input} /> 
+          <button>Search</button>
+        </form>
+      </div>
+    );
+  }
 }
 
 export default App;

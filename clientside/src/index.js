@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import {Provider } from 'mobx-react'
+import ResturantStore from './stores/ResturantStore'
+const Root = (
+  <Provider ResturantStore={ResturantStore} >
+    <App/>
+  </Provider>
+);
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  Root,
   document.getElementById('root')
 );
 
