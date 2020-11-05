@@ -5,12 +5,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Newtonsoft.Json;
 using WebAPI.Models;
 using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ResturantsController : ApiController
     {
         private ResturantService resturantService = new ResturantService();
