@@ -24,11 +24,24 @@ class App extends Component {
       this.props.ResturantStore.removeOrder(menuItem.Id)
     }
   }
+
+  sortList(list){
+    const sorted = list.slice().sort((a, b) => a.Rank - b.Rank);
+    return sorted;
+  }
+
+  sortListbyMenuItems(list){
+    const sorted = list.slice().sort((a, b) => b.MenuItems.length - a.MenuItems.length);
+    return sorted;
+  }
   render(){
 
     var cityValue = this.props.ResturantStore.filteredResturantsByTerm.length > 0 ? this.props.ResturantStore.filteredResturantsByTerm[0].City : null
     var keywordValue = this.props.ResturantStore.filteredResturantsByTerm.length > 0 ? this.props.ResturantStore.filteredResturantsByTerm[0].searchWord : null
+    let filteredList = this.props.ResturantStore.filteredResturantsByTerm;
     
+    filteredList = filteredList.length > 0 ? this.sortListbyMenuItems(filteredList): filteredList;
+    filteredList = filteredList.length > 0 ? this.sortList(filteredList) : filteredList;
     return (
       <div className="App">
         {(keywordValue !== null && cityValue !== null )
@@ -40,7 +53,7 @@ class App extends Component {
         </form>
 
         <div className={"Resturant-container"}>
-          {this.props.ResturantStore.filteredResturantsByTerm.map((e,i) => 
+          {filteredList.length > 0 && filteredList.map((e,i) => 
             {
 
               if(e.Categories.length === 1){
@@ -48,7 +61,7 @@ class App extends Component {
 
 
                   return <div key={i} className={"Resturant-header"}>
-                              <div>{e.Name} {e.Suburb} {e.Rank}</div>
+                              <div className={"Resturant-Description"}>{e.Name} {e.Suburb} {e.Rank}</div>
                               <div className={"Category-header"}>{e.Categories[0].Name}</div>
                               {
                                 e.Categories.map((cat) => {
@@ -63,7 +76,7 @@ class App extends Component {
                 }
               }else{
                 return <div key={i} className={"Resturant-header"}>
-                          <div>{e.Name} {e.Suburb} {e.Rank}</div>
+                          <div className={"Resturant-Description"}>{e.Name} {e.Suburb} {e.Rank}</div>
                           {
                             e.MenuItems.map((men) => {
                                 return <div key={men.Id}><input type="checkbox" value={men} onClick={(e) => this.handleOrder(e,men)}/> {men.Name} - {men.Price}</div> 

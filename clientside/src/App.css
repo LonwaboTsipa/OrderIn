@@ -42,6 +42,9 @@
   font-weight: bold;
 }
 
+.Resturant-Description{
+  font-weight: bold;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
