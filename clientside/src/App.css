@@ -28,6 +28,15 @@
   color: #61dafb;
 }
 
+.Resturant-header {
+  display: block;
+  margin: 5px;
+}
+
+.Resturant-container {
+  display: block;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

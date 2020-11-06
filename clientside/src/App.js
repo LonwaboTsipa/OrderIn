@@ -18,21 +18,46 @@ class App extends Component {
   }
   render(){
 
+    var cityValue = this.props.ResturantStore.currentSearchCity.length > 0 ? this.props.ResturantStore.currentSearchCity : ''
     return (
       <div className="App">
-        <h2>You have { this.props.ResturantStore.filteredResturants}</h2>
+        <h2>You have { cityValue}</h2>
 
         <form onSubmit={e => this.handleSearch(e)}>
           <input type="text" placeholder="Enter search keyword" ref={ input => this.keyword = input} /> 
           <button>Search</button>
         </form>
 
-        <ul>
-          {this.props.ResturantStore.resturants.map((e,i) => 
+        <div className={"Resturant-container"}>
+          {this.props.ResturantStore.filteredResturantsByTerm.map((e,i) => 
             {
-            return <li key={i}>{e.Name}</li>
+
+              if(e.Categories.length === 1){
+                if(e.Categories[0].MenuItems.length === e.MenuItems.length){
+
+
+                  return <div key={i} className={"Resturant-header"}>
+                              <div>{e.Name} {e.Suburb} {e.Rank}</div>
+                              <div>{e.Categories[0]}</div>
+                              {
+                                e.Categories.map((cat) => {
+                                return cat.MenuItems.map((men) => {
+
+                                  return <div key={men.Id}><input type="checkbox" /> {men.Name} - {men.Price}</div>
+                                  })
+                                  
+                                })
+                              }
+                          </div>
+                }
+              }else{
+                return <div key={i} className={"Resturant-header"}>
+                          <div>{e.Name} {e.Suburb} {e.Rank}</div>
+                      </div>
+              }
+              
             })}
-        </ul>
+        </div>
       </div>
     );
   }
