@@ -5,6 +5,10 @@ class ResturantStore {
     @observable currentSearchCity = observable.array();
     @observable filteredResturantsByTerm = observable.array();
 
+    @action clearFilter = () => {
+        this.filteredResturantsByTerm.splice(0,this.filteredResturantsByTerm.length);
+    }
+
     //used to change state
     @action filterResturants = (searchTerm) => {
         let rest = this.resturants;
@@ -15,13 +19,13 @@ class ResturantStore {
                     return searchTerm.toLowerCase().includes(res.City.toLowerCase());
             });
 
+            if(this.filteredResturantsByTerm.length > 0){
+                this.clearFilter();
+            }
+
             if(filteredByTown.length > 0){
-                //make these interfaces for clean code
-                
                 let searchWordref = this.removeUselessWords(searchTerm, filteredByTown[0].City);
                 searchWordref = searchWordref.trim();
-
-              //  let resturants = [];
                 
                 filteredByTown.forEach((res) => {
                     let resturant = {
@@ -29,7 +33,7 @@ class ResturantStore {
                         Rank: 0,
                         Suburb: null,
                         City:filteredByTown[0].City,
-                        searchWord: searchWordref,
+                        searchWord: this.firstLetter(searchWordref),
                         MenuItems: [],
                         Categories: [],
                     };
@@ -60,17 +64,18 @@ class ResturantStore {
                         this.filteredResturantsByTerm.push(resturant)
                     }
                 });
-                console.log(this.filteredResturantsByTerm);
+                
+              //  console.log(this.filteredResturantsByTerm);
 
 
             }
-
-            
-            console.log('filteredByTown', filteredByTown);
-
-
         }
     }
+
+    firstLetter = (word) => {
+
+        return word.replace(/^.{1}/g, word[0].toUpperCase());
+      }
 
     @action removeUselessWords = (txt, city) => {
         var uselessWordsArray = 
@@ -96,14 +101,11 @@ class ResturantStore {
        });      
     }
     
-    //used for calculations
     @computed get filteredResturants(){
-        //console.log('filtered', this.resturants);
         return this.resturants;
     }
 
     @computed get getSearchCity(){
-        //console.log('filtered', this.resturants);
         return this.currentSearchCity;
     }
 }

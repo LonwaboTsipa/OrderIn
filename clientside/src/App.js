@@ -18,10 +18,13 @@ class App extends Component {
   }
   render(){
 
-    var cityValue = this.props.ResturantStore.currentSearchCity.length > 0 ? this.props.ResturantStore.currentSearchCity : ''
+    var cityValue = this.props.ResturantStore.filteredResturantsByTerm.length > 0 ? this.props.ResturantStore.filteredResturantsByTerm[0].City : null
+    var keywordValue = this.props.ResturantStore.filteredResturantsByTerm.length > 0 ? this.props.ResturantStore.filteredResturantsByTerm[0].searchWord : null
+    
     return (
       <div className="App">
-        <h2>You have { cityValue}</h2>
+        {(keywordValue !== null && cityValue !== null )
+        && <h2>{keywordValue} resturants in { cityValue}</h2>}
 
         <form onSubmit={e => this.handleSearch(e)}>
           <input type="text" placeholder="Enter search keyword" ref={ input => this.keyword = input} /> 
@@ -38,7 +41,7 @@ class App extends Component {
 
                   return <div key={i} className={"Resturant-header"}>
                               <div>{e.Name} {e.Suburb} {e.Rank}</div>
-                              <div>{e.Categories[0]}</div>
+                              <div className={"Category-header"}>{e.Categories[0].Name}</div>
                               {
                                 e.Categories.map((cat) => {
                                 return cat.MenuItems.map((men) => {
@@ -53,6 +56,11 @@ class App extends Component {
               }else{
                 return <div key={i} className={"Resturant-header"}>
                           <div>{e.Name} {e.Suburb} {e.Rank}</div>
+                          {
+                            e.MenuItems.map((men) => {
+                                return <div key={men.Id}><input type="checkbox" /> {men.Name} - {men.Price}</div> 
+                              })
+                          }
                       </div>
               }
               
