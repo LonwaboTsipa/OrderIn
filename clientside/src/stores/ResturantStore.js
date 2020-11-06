@@ -13,7 +13,6 @@ class ResturantStore {
     @action addOrder = (order) => {
         this.currentOrder.push(order);
 
-        console.log('add ordder', this.currentOrder)
     }
 
     @action removeOrder = (id) => {
@@ -21,14 +20,11 @@ class ResturantStore {
             return x.Id;
           }).indexOf(id);
           this.currentOrder.splice(index, 1);
-console.log('vurrent order',this.currentOrder);
     }
 
     @computed get orderSum(){
         if(this.currentOrder.length > 0){
-
             const sum = this.currentOrder.reduce((a, {Price}) => a + Price, 0);
-            console.log('sum',sum)
             return sum;
         }
         return 0;
@@ -90,7 +86,6 @@ console.log('vurrent order',this.currentOrder);
                     }
                 });
                 
-              //  console.log(this.filteredResturantsByTerm);
 
 
             }
@@ -98,7 +93,6 @@ console.log('vurrent order',this.currentOrder);
     }
 
     firstLetter = (word) => {
-
         return word.replace(/^.{1}/g, word[0].toUpperCase());
       }
 
