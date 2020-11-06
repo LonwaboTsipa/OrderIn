@@ -16,6 +16,14 @@ class App extends Component {
     this.props.ResturantStore.filterResturants(keyword);
 
   }
+
+  handleOrder(e,menuItem){
+    if(e.target.checked){
+      this.props.ResturantStore.addOrder(menuItem)
+    }else{
+      this.props.ResturantStore.removeOrder(menuItem.Id)
+    }
+  }
   render(){
 
     var cityValue = this.props.ResturantStore.filteredResturantsByTerm.length > 0 ? this.props.ResturantStore.filteredResturantsByTerm[0].City : null
@@ -46,7 +54,7 @@ class App extends Component {
                                 e.Categories.map((cat) => {
                                 return cat.MenuItems.map((men) => {
 
-                                  return <div key={men.Id}><input type="checkbox" /> {men.Name} - {men.Price}</div>
+                                  return <div key={men.Id}><input type="checkbox" value={men} onClick={(e) => this.handleOrder(e,men)}/> {men.Name} - {men.Price}</div>
                                   })
                                   
                                 })
@@ -58,13 +66,17 @@ class App extends Component {
                           <div>{e.Name} {e.Suburb} {e.Rank}</div>
                           {
                             e.MenuItems.map((men) => {
-                                return <div key={men.Id}><input type="checkbox" /> {men.Name} - {men.Price}</div> 
+                                return <div key={men.Id}><input type="checkbox" value={men} onClick={(e) => this.handleOrder(e,men)}/> {men.Name} - {men.Price}</div> 
                               })
                           }
                       </div>
               }
               
             })}
+        </div>
+
+        <div>
+          {this.props.ResturantStore.orderSum > 0 && <button>Order {this.props.ResturantStore.orderSum}</button>}
         </div>
       </div>
     );

@@ -4,9 +4,34 @@ class ResturantStore {
     @observable resturants = observable.array();
     @observable currentSearchCity = observable.array();
     @observable filteredResturantsByTerm = observable.array();
+    @observable currentOrder = observable.array();
 
     @action clearFilter = () => {
         this.filteredResturantsByTerm.splice(0,this.filteredResturantsByTerm.length);
+    }
+
+    @action addOrder = (order) => {
+        this.currentOrder.push(order);
+
+        console.log('add ordder', this.currentOrder)
+    }
+
+    @action removeOrder = (id) => {
+        let index = this.currentOrder.map(x => {
+            return x.Id;
+          }).indexOf(id);
+          this.currentOrder.splice(index, 1);
+console.log('vurrent order',this.currentOrder);
+    }
+
+    @computed get orderSum(){
+        if(this.currentOrder.length > 0){
+
+            const sum = this.currentOrder.reduce((a, {Price}) => a + Price, 0);
+            console.log('sum',sum)
+            return sum;
+        }
+        return 0;
     }
 
     //used to change state
