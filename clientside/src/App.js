@@ -14,6 +14,7 @@ class App extends Component {
     val.preventDefault();
     const keyword = this.keyword.value;
     this.props.ResturantStore.filterResturants(keyword);
+    this.keyword.value = "";
 
   }
 
@@ -23,6 +24,10 @@ class App extends Component {
     }else{
       this.props.ResturantStore.removeOrder(menuItem.Id)
     }
+  }
+
+  handlePlaceOrder(){
+    this.props.ResturantStore.sendOrderToChef()
   }
 
   sortList(list){
@@ -89,7 +94,14 @@ class App extends Component {
         </div>
 
         <div>
-          {this.props.ResturantStore.orderSum > 0 && <button>Order {this.props.ResturantStore.orderSum}</button>}
+          {
+          this.props.ResturantStore.getSuccessMessage !== null &&
+          <div>{this.props.ResturantStore.getSuccessMessage}</div>
+          }
+        </div>
+
+        <div>
+          {this.props.ResturantStore.orderSum > 0 && <button onClick={() => this.props.ResturantStore.sendOrderToChef()}>Order {this.props.ResturantStore.orderSum}</button>}
         </div>
       </div>
     );

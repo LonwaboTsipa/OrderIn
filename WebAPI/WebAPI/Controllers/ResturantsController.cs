@@ -30,8 +30,11 @@ namespace WebAPI.Controllers
         }
 
         // POST: api/Resturants
-        public void Post([FromBody]string value)
+        [HttpPost]
+        public HttpResponseMessage PostOrder([FromBody]dynamic value)
         {
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, "success");
+            return response;
         }
 
         // PUT: api/Resturants/5

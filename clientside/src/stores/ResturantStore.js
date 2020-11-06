@@ -5,9 +5,14 @@ class ResturantStore {
     @observable currentSearchCity = observable.array();
     @observable filteredResturantsByTerm = observable.array();
     @observable currentOrder = observable.array();
+    @observable successMessage = observable.array();
 
     @action clearFilter = () => {
         this.filteredResturantsByTerm.splice(0,this.filteredResturantsByTerm.length);
+    }
+
+    @action clearOrder = () => {
+        this.currentOrder.splice(0,this.currentOrder.length);
     }
 
     @action addOrder = (order) => {
@@ -30,12 +35,40 @@ class ResturantStore {
         return 0;
     }
 
+    @action sendOrderToChef = () => {
+        fetch('http://localhost:55398/api/resturants/PostOrder', {
+        method: 'POST',
+        body: JSON.stringify(this.currentOrder),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+        }
+    })
+    .then(response => response.json())
+    .then(json => {
+        console.log('successeee',json);
+
+        if(json === "success"){
+            this.clearFilter();
+            this.clearOrder();
+            this.addSuccessfulOrder("Successfully placed order");
+        }
+    });
+    }
+    @action addSuccessfulOrder = (msg) => {
+        this.successMessage.push(msg)
+    }
+    
+    @action removeSuccessfulOrder = () => {
+        this.successMessage.splice(0,this.successMessage.length);
+    }
     //used to change state
     @action filterResturants = (searchTerm) => {
         let rest = this.resturants;
 
         if(rest.length > 0)
         {
+
+            this.removeSuccessfulOrder()
             let filteredByTown = rest.filter((res) => {
                     return searchTerm.toLowerCase().includes(res.City.toLowerCase());
             });
@@ -85,9 +118,6 @@ class ResturantStore {
                         this.filteredResturantsByTerm.push(resturant)
                     }
                 });
-                
-
-
             }
         }
     }
@@ -107,8 +137,13 @@ class ResturantStore {
                         .replace(/\s{2,}/g, ' ');
       }
 
-      @action setSearchTown(city){
-          this.currentSearchCity = city;
+      @computed get getSuccessMessage(){
+          if(this.successMessage.length > 0){
+            return this.successMessage[0];
+          }else{
+            return null;
+          }
+          
       }
 
     @action loadResturantData = async () => {
